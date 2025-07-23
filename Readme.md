@@ -1,4 +1,4 @@
-# EliteZone Backend
+# Mithila Borther Backend - EliteZone
 
 EliteZone Backend is a comprehensive server-side application for managing e-commerce functionalities. This backend handles user authentication, product management, order processing, and more. It integrates with Firebase for authentication and Cloudinary for file uploads.
 
