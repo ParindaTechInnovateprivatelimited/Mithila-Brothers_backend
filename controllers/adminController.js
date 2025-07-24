@@ -341,17 +341,17 @@ exports.authAdmin = async (req, res) => {
         const decodedToken = await admin.auth().verifyIdToken(fbToken);
         let user = await Admin.findOne({ firebaseId: decodedToken.uid });
         if (!user) {
-            return res.status(400).json({
-                success: false, message: 'Access not allowed!'
-            })
-            // user = new User({
-            //     firebaseId: decodedToken.uid,
-            //     email: decodedToken.email,
-            //     firstName: decodedToken.name || 'First Name',
-            //     lastName: decodedToken.lastName || 'Last Name',
-            //     phone: decodedToken.phone || '',
-            // });
-            // await user.save();
+            // return res.status(400).json({
+            //     success: false, message: 'Access not allowed!'
+            // })
+            user = new User({
+                firebaseId: decodedToken.uid,
+                email: decodedToken.email,
+                firstName: decodedToken.name || 'First Name',
+                lastName: decodedToken.lastName || 'Last Name',
+                phone: decodedToken.phone || '',
+            });
+            await user.save();
         }
 
         const token = jwt.sign(
