@@ -351,7 +351,7 @@ exports.authAdmin = async (req, res) => {
             //     lastName: decodedToken.lastName || 'Last Name',
             //     phone: decodedToken.phone || '',
             // });
-            await user.save();
+            // await user.save();
         }
 
         const token = jwt.sign(
