@@ -12,8 +12,14 @@ router.post('/auth', async (req, res) => {
         const decodedToken = await admin.auth().verifyIdToken(fbToken);
         let user = await User.findOne({ firebaseId: decodedToken.uid });
         if (!user) {
-            const fullName = decodedToken.name;
-            const [firstName, lastName] = fullName.split(' ');
+            let firstName = "";
+            let lastName = "";
+            const fullName = decodedToken?.name;
+            if (fullName && typeof fullName === "string") {
+                const parts = fullName.trim().split(" ");
+                firstName = parts[0];
+                lastName = parts.slice(1).join(" ");
+            }
             user = new User({
                 firebaseId: decodedToken.uid,
                 email: decodedToken.email,
