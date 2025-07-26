@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const { isAdmin } = require('../../middlewares/admin');
 const { getStats, getUsers, getUserDetails, getProducts, getProductDetails, getOrders, getOrderDetails, getFilteredOrders, createOffer, addProduct, updateProduct, deleteProduct, authAdmin, getAdmin, getOfferList, getOrderChartData } = require('../../controllers/adminController');
+const productValidate = require('../../validators/productValidate');
 
 router.get('/stats',isAdmin, getStats);
 
@@ -21,7 +22,7 @@ router.get('/products', isAdmin, getProducts);
 router.get('/products/:id', isAdmin, getProductDetails);
 
 router.post('/products', isAdmin, addProduct);
-router.put('/products/:productId',isAdmin, updateProduct);
+router.put('/products/:productId', isAdmin, productValidate, updateProduct);
 router.delete('/products/:productId',  isAdmin, deleteProduct);
 
 router.post('/auth', authAdmin);
