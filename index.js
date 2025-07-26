@@ -37,9 +37,9 @@ app.use(express.json());
 connectDB();
 
 app.use(fileUpload({
-    limits: { fileSize: 50 * 1024 * 1024 },
-    useTempFiles: true
-}));
+    limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
+    useTempFiles: false
+  }));
 
 
 app.use(cronMiddleware)
