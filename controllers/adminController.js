@@ -278,9 +278,9 @@ exports.updateProduct = async (req, res) => {
 
     try {
         const product = await Product.findOneAndUpdate({ _id: productId }, updates, { new: true });
-        res.status(200).json({ message: 'Product updated', product });
+        res.status(200).json({ success:true, message: 'Product updated', product });
     } catch (error) {
-        res.status(400).json({ error: 'Could not update product' });
+        res.status(400).json({ success:false, error: 'Could not update product' });
     }
 }
 
