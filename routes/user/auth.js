@@ -12,24 +12,30 @@ router.post('/auth', async (req, res) => {
         const decodedToken = await admin.auth().verifyIdToken(fbToken);
         let user = await User.findOne({ firebaseId: decodedToken.uid });
         if (!user) {
-            let firstName = "";
-            let lastName = "";
-            const fullName = decodedToken?.name;
-            if (fullName && typeof fullName === "string") {
-                const parts = fullName.trim().split(" ");
-                firstName = parts[0];
-                lastName = parts.slice(1).join(" ");
+            user = await User.findOne({ email: decodedToken.email });
+
+            if (!user) {
+                const fullName = decodedToken?.name || '';
+                const nameParts = fullName.trim().split(' ');
+
+                const firstName = nameParts[0] || 'First Name';
+                const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
+
+                user = new User({
+                    firebaseId: decodedToken.uid,
+                    email: decodedToken.email || '',
+                    firstName,
+                    lastName,
+                    phone: decodedToken.phone_number || decodedToken.phone || null,
+                    address: 'Default Address',
+                    pincode: null,
+                });
+
+                await user.save();
+            } else {
+                user.firebaseId = decodedToken.uid;
+                await user.save();
             }
-            user = new User({
-                firebaseId: decodedToken.uid,
-                email: decodedToken.email,
-                firstName: firstName || 'First Name',
-                lastName: lastName || '',
-                phone: decodedToken.phone || null,
-                address: 'Default Address',
-                pincode: null,
-            });
-            await user.save();
         }
 
         const token = jwt.sign({ uid: decodedToken.uid, id: user._id, email: user.email, }, JWT_SECRET, { expiresIn: '1d' });
