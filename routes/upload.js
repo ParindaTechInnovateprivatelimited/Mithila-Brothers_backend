@@ -3,7 +3,7 @@ const router = express.Router();
 const { isAdmin } = require('../middlewares/admin');
 const { uploadToCloudinary } = require('../middlewares/upload');
 
-router.post('/upload', async (req, res) => {
+router.post('/upload', isAdmin, async (req, res) => {
     const images = req.files.files;
     if (!images) {
         return res.status(400).json({ message: 'No image files uploaded' });
